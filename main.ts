@@ -1,9 +1,74 @@
 namespace SpriteKind {
     export const tree = SpriteKind.create()
+    export const key = SpriteKind.create()
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
-    health += 5
+namespace myTiles {
+    //% blockIdentity=images._tile
+    export const tile0 = img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`
+}
+controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
+    person.x += -3
 })
+controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
+    person.y += 3
+})
+scene.onHitWall(SpriteKind.Player, function (sprite) {
+    person.y += 10
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    info.changeLifeBy(1)
+    food1.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
+    food2.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
+    food3.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
+})
+controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+    person.x += 3
+})
+controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+    person.y += -3
+})
+let food3: Sprite = null
+let food2: Sprite = null
+let food1: Sprite = null
+let person: Sprite = null
+let key = sprites.create(img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . 5 . . . . 
+. . . . . . . . . . 5 5 5 . . . 
+. . . . . . . . . 5 5 . 5 5 . . 
+. . . . . . . 5 5 5 . . . 5 . . 
+. . . . . . 5 5 . . . . . . . . 
+. . 5 5 5 5 5 . . . . . . . . . 
+. . 5 . 5 5 . . . . . . . . . . 
+. . 5 . 5 5 . . . . . . . . . . 
+. . 5 5 5 5 . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`, SpriteKind.key)
+tiles.setWallAt(tiles.getTileLocation(0, 15), true)
+info.setLife(10)
+controller.moveSprite(person)
 scene.setBackgroundImage(img`
 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 
 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 
@@ -215,7 +280,7 @@ let tree2 = sprites.create(img`
 `, SpriteKind.tree)
 tree1.setPosition(22, 61)
 tree2.setPosition(133, 61)
-let person = sprites.create(img`
+person = sprites.create(img`
 . . . . . . . . . . . . . . . . . . . c c . . . 
 . . . . . . . . . . . . . . . c c c c 6 3 c . . 
 . . . . . . . . . . . . . . c 6 3 3 3 3 6 c . . 
@@ -234,7 +299,7 @@ let person = sprites.create(img`
 . . . . . . . . . c c c c c c c c c . . c c c . 
 `, SpriteKind.Player)
 person.setPosition(78, 79)
-let food1 = sprites.create(img`
+food1 = sprites.create(img`
 . . . . c c c b b b b b . . . . 
 . . c c b 4 4 4 4 4 4 b b b . . 
 . c c 4 4 4 4 4 5 4 4 4 4 b c . 
@@ -252,7 +317,7 @@ e e b e c c e e e e e c e b e e
 . e e b b 4 4 4 4 4 4 4 4 e e . 
 . . . c c c c c e e e e e . . . 
 `, SpriteKind.Food)
-let food2 = sprites.create(img`
+food2 = sprites.create(img`
 . . 2 2 b b b b b . . . . . . . 
 . 2 b 4 4 4 4 4 4 b . . . . . . 
 2 2 4 4 4 4 d d 4 4 b . . . . . 
@@ -270,40 +335,27 @@ let food2 = sprites.create(img`
 . . . . . . . . . . . c 1 b c . 
 . . . . . . . . . . . . c c . . 
 `, SpriteKind.Food)
-let food3 = sprites.create(img`
-. . . . . . . . . . . . . . e e e e e e e . . . . . . . . . . . 
-. . . . . . . . . . . . e e 4 5 5 6 6 2 e 2 e . . . . . . . . . 
-. . . . . . . . . . e e 4 5 5 5 6 7 2 3 e 2 6 8 8 . . . . . . . 
-. . . . . . . . . e 4 6 7 7 6 6 7 7 2 3 2 e 7 7 7 6 6 8 . . . . 
-. . . . . . . . e 4 6 7 4 5 5 5 4 7 7 2 2 2 7 7 7 6 7 7 8 . . . 
-. . . . . . . 4 4 4 8 7 4 4 4 4 4 7 7 7 7 6 6 7 7 7 6 7 8 . . . 
-. . . . . . 4 5 2 2 e 7 7 7 7 7 7 6 7 7 7 7 6 6 6 7 6 6 6 8 . . 
-. . . . . 4 5 2 3 2 2 7 7 6 6 7 2 2 e 6 6 6 e e e e e 8 8 8 . . 
-. . . . 4 5 5 2 3 2 e 7 6 6 7 2 3 2 2 e 4 5 5 5 d d d d 4 8 . . 
-. . . 4 4 5 6 7 7 7 7 5 5 4 6 2 3 e 4 5 5 d d d d d d d d d 4 . 
-. . . e 6 6 7 7 4 5 5 4 4 7 7 e 4 5 5 d d d d 5 5 5 5 4 d d 4 4 
-. . e 4 6 7 7 7 4 4 4 6 7 7 e 5 5 d d 5 5 5 5 5 d 5 5 d d d d 4 
-. . e 5 6 6 8 6 7 7 6 6 6 e 5 d d 5 5 5 5 5 5 5 5 5 5 5 5 d d e 
-. e 4 5 5 4 4 e 8 7 7 6 e 5 d 5 5 5 5 5 4 5 5 5 5 5 5 5 5 5 d e 
-. e 5 5 4 e e e e 6 6 e 5 d 5 5 5 5 d 5 5 5 5 5 d d d d 5 4 d e 
-. e 5 5 e e 4 4 f e e 5 d 5 d 5 5 5 5 5 5 d 5 d 5 d d d d d d e 
-e 4 5 4 e e e e f e 4 5 d 5 5 5 5 5 5 5 5 5 5 5 d d 4 d d d e . 
-e 5 e 4 e e f f f e 5 d 5 5 5 5 5 5 5 5 d 5 5 5 5 d d d d e . . 
-e 5 e e 4 e e f f 4 5 d 5 5 5 5 5 5 5 5 5 5 5 5 d d d d e . . . 
-e 5 e e e e f f e 5 d 5 5 d 5 5 5 d 5 5 5 5 d 5 d d d e . . . . 
-e 5 f f e f e e e 5 d 5 5 5 4 5 5 5 5 5 5 5 d d d 4 e . . . . . 
-e 5 f f f f f f e 5 4 5 5 5 5 5 5 5 d 5 d 4 d d e e . . . . . . 
-e 5 4 e f e f f 4 5 d 5 5 d 5 5 5 5 5 d d d d e . . . . . . . . 
-e 5 e e e f f e 5 d d 5 5 5 5 5 4 5 d d d e e . . . . . . . . . 
-e 4 e e e f f f 5 d 5 5 5 5 d 5 5 d d d e . . . . . . . . . . . 
-e 4 e f e f f f 5 d 5 d 5 5 5 5 5 d 4 e . . . . . . . . . . . . 
-. e 4 e f f f e 5 d 5 5 5 5 5 5 d e e . . . . . . . . . . . . . 
-. e 5 4 e e e e 5 d 5 4 5 d d 4 e . . . . . . . . . . . . . . . 
-. . e 5 5 4 e e 5 d d d d d e e . . . . . . . . . . . . . . . . 
-. . . e e 5 5 4 4 d d d e e . . . . . . . . . . . . . . . . . . 
-. . . . . e e e e e e e . . . . . . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+food3 = sprites.create(img`
+. . . . . . 2 2 2 2 . . . . . . 
+. . . . 2 2 3 3 3 3 2 e . . . . 
+. . . 2 3 d 1 1 d d 3 2 e . . . 
+. . 2 3 1 d 3 3 3 d d 3 e . . . 
+. 2 3 1 3 3 3 3 3 d 1 3 b e . . 
+. 2 1 d 3 3 3 3 d 3 3 1 3 b b . 
+2 3 1 d 3 3 1 1 3 3 3 1 3 4 b b 
+2 d 3 3 d 1 3 1 3 3 3 1 3 4 4 b 
+2 d 3 3 3 1 3 1 3 3 3 1 b 4 4 e 
+2 d 3 3 3 1 1 3 3 3 3 1 b 4 4 e 
+e d 3 3 3 3 d 3 3 3 d d b 4 4 e 
+e d d 3 3 3 d 3 3 3 1 3 b 4 b e 
+e 3 d 3 3 1 d d 3 d 1 b b e e . 
+. e 3 1 1 d d 1 1 1 b b e e e . 
+. . e 3 3 3 3 3 3 b e e e e . . 
+. . . e e e e e e e e e e . . . 
 `, SpriteKind.Food)
-food1.setPosition(32, 41)
-food2.setPosition(64, 34)
-food3.setPosition(118, 62)
+food1.setPosition(27, 110)
+food2.setPosition(133, 57)
+food3.setPosition(16, 74)
+forever(function () {
+    pause(5000)
+})
