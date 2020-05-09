@@ -40,8 +40,17 @@ scene.onHitWall(SpriteKind.Player, function (sprite) {
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     info.changeLifeBy(1)
     food1.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
+    while (person.overlapsWith(food1)) {
+        food1.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
+    }
     food2.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
+    while (person.overlapsWith(food2) || food2.overlapsWith(food1)) {
+        food2.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
+    }
     food3.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
+    while (person.overlapsWith(food3) || (food3.overlapsWith(food2) || food3.overlapsWith(food1))) {
+        food3.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
+    }
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     person.x += 3
