@@ -3,6 +3,7 @@ namespace SpriteKind {
     export const key = SpriteKind.create()
     export const burger = SpriteKind.create()
     export const mountain = SpriteKind.create()
+    export const playerkey = SpriteKind.create()
 }
 namespace myTiles {
     //% blockIdentity=images._tile
@@ -34,14 +35,12 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
 sprites.onOverlap(SpriteKind.Player, SpriteKind.mountain, function (sprite, otherSprite) {
     person.y += 3
 })
-scene.onHitWall(SpriteKind.Player, function (sprite) {
-    person.y += 10
-})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     info.changeLifeBy(1)
     food1.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
     while (person.overlapsWith(food1)) {
         food1.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
+        key2.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
     }
     food2.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
     while (person.overlapsWith(food2) || food2.overlapsWith(food1)) {
@@ -51,6 +50,32 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     while (person.overlapsWith(food3) || (food3.overlapsWith(food2) || food3.overlapsWith(food1))) {
         food3.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
     }
+    key2.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
+    while (key2.overlapsWith(person) || (key2.overlapsWith(food3) || (key2.overlapsWith(food2) || key2.overlapsWith(food1)))) {
+        key2.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
+    }
+})
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    person.setImage(img`
+. . . . . f f 4 4 f f . . . . . 
+. . . . f 5 4 5 5 4 5 f . . . . 
+. . . f e 4 5 5 5 5 4 e f . . . 
+. . f b 3 e 4 4 4 4 e 3 b f . . 
+. . f 3 3 3 3 3 3 3 3 3 3 f . . 
+. f 3 3 e b 3 e e 3 b e 3 3 f . 
+. f 3 3 f f e e e e f f 3 3 f . 
+. f b b f b f e e f b f b b f . 
+. f b b e 1 f 4 4 f 1 e b b f . 
+f f b b f 4 4 4 4 4 4 f b b f f 
+f b b f f f e e e e f f f b b f 
+. f e e f b d d d d b f e e f . 
+. . e 4 c d d d d d d c 4 e . . 
+. . e f b d b d b d b b f e . . 
+. . . f f 1 d 1 d 1 d f f . . . 
+. . . . . f f b b f f . . . . . 
+`)
+    person.setKind(SpriteKind.Player)
+    key2.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     person.x += 3
@@ -62,7 +87,8 @@ let food3: Sprite = null
 let food2: Sprite = null
 let food1: Sprite = null
 let person: Sprite = null
-let key2 = sprites.create(img`
+let key2: Sprite = null
+key2 = sprites.create(img`
 . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . 5 . . . . 
 . . . . . . . . . . 5 5 5 . . . 
@@ -326,6 +352,7 @@ d d d d d d d . . . . . . . . . d d d d d d d d d d d d d d d d d d d d d d d d 
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
 `, SpriteKind.mountain)
+mountain2.setPosition(80, 60)
 let health = 100
 let tree1 = sprites.create(img`
 . . . . . . . . . . . . . . . . 8 6 . . . . . . . . . . . . . . . . . . 
@@ -416,22 +443,22 @@ let tree2 = sprites.create(img`
 tree1.setPosition(22, 61)
 tree2.setPosition(133, 61)
 person = sprites.create(img`
-. . . . . . . . . . . . . . . . . . . c c . . . 
-. . . . . . . . . . . . . . . c c c c 6 3 c . . 
-. . . . . . . . . . . . . . c 6 3 3 3 3 6 c . . 
-. . . . . . . . . . c c . c 6 c c 3 3 3 3 3 c . 
-. . . . . . . . . b 5 5 c 6 c 5 5 c 3 3 3 3 3 c 
-. . . . . . . . . f f 5 c 6 c 5 f f 3 3 3 3 3 c 
-. . . . . . . . . f f 5 c 6 c 5 f f 6 3 3 3 c c 
-. . . . . . . . . b 5 5 3 c 3 5 5 c 6 6 6 6 c c 
-. . . . . . . . . . b 5 5 3 5 5 c 3 3 3 3 3 3 c 
-. . . . . . . . . c c 5 5 5 5 5 b c c 3 3 3 3 c 
-. . . . . . . . c 5 5 4 5 5 5 4 b 5 5 c 3 3 c . 
-. . . . . . . . b 5 4 b 4 4 4 4 b b 5 c b b . . 
-. . . . . . . . c 4 5 5 b 4 b 5 5 5 4 c 4 5 b . 
-. . . . . . . . c 5 5 5 c 4 c 5 5 5 c 4 c 5 c . 
-. . . . . . . . c 5 5 5 5 c 5 5 5 5 c 4 c 5 c . 
-. . . . . . . . . c c c c c c c c c . . c c c . 
+. . . . . f f 4 4 f f . . . . . 
+. . . . f 5 4 5 5 4 5 f . . . . 
+. . . f e 4 5 5 5 5 4 e f . . . 
+. . f b 3 e 4 4 4 4 e 3 b f . . 
+. . f 3 3 3 3 3 3 3 3 3 3 f . . 
+. f 3 3 e b 3 e e 3 b e 3 3 f . 
+. f 3 3 f f e e e e f f 3 3 f . 
+. f b b f b f e e f b f b b f . 
+. f b b e 1 f 4 4 f 1 e b b f . 
+f f b b f 4 4 4 4 4 4 f b b f f 
+f b b f f f e e e e f f f b b f 
+. f e e f b d d d d b f e e f . 
+. . e 4 c d d d d d d c 4 e . . 
+. . e f b d b d b d b b f e . . 
+. . . f f 1 d 1 d 1 d f f . . . 
+. . . . . f f b b f f . . . . . 
 `, SpriteKind.Player)
 person.setPosition(78, 79)
 food1 = sprites.create(img`
@@ -488,10 +515,46 @@ e 3 d 3 3 1 d d 3 d 1 b b e e .
 . . e 3 3 3 3 3 3 b e e e e . . 
 . . . e e e e e e e e e e . . . 
 `, SpriteKind.Food)
-food1.setPosition(27, 110)
-food2.setPosition(105, 69)
-food3.setPosition(16, 74)
+food1.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
+food2.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
+food3.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
+key2.setPosition(Math.randomRange(5, 140), Math.randomRange(80, 110))
 forever(function () {
-    pause(3500)
+    pause(2500)
     info.changeLifeBy(-1)
+})
+forever(function () {
+    mountain2.setPosition(80, 60)
+    while (person.overlapsWith(key2)) {
+        key2.setPosition(0, 0)
+        person.x += -5
+        person.setImage(img`
+. . . . . f f 4 4 f f . . . . . . . . . . . . . . 
+. . . . f 5 4 5 5 4 5 f . . . . . . . . . . 5 5 . 
+. . . f e 4 5 5 5 5 4 e f . . . . . . . . 5 5 . . 
+. . f b 3 e 4 4 4 4 e 3 b f . . . . . . 5 5 5 5 . 
+. . f 3 3 3 3 3 3 3 3 3 3 f . . . . . . 5 . . 5 . 
+. f 3 3 e b 3 e e 3 b e 3 3 f . . . . 5 5 . . . . 
+. f 5 3 f f e e e e f f 3 3 f . . . 5 5 . . . . . 
+. f b b f b f e e f b f b b f 5 5 5 5 . . . . . . 
+. f b b e 1 f 4 4 f 1 e b b f 5 . . 5 . . . . . . 
+f f b b f 4 4 4 4 4 4 f b b f 5 5 . 5 . . . . . . 
+f b b f f f e e e e f f f b b f 5 5 5 . . . . . . 
+. f e e f b d d d d b f e e f . . . . . . . . . . 
+. . e 4 c d d d d d d c 4 e . . . . . . . . . . . 
+. . e f b d b d b d b b f e . . . . . . . . . . . 
+. . . f f 1 d 1 d 1 d f f . . . . . . . . . . . . 
+. . . . . f f b b f f . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . . . . . . . . . . 
+`)
+        person.setKind(SpriteKind.playerkey)
+    }
 })
